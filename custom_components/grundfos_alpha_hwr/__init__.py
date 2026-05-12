@@ -17,7 +17,7 @@ from homeassistant.core import HomeAssistant
 
 import logging
 
-from .const import DEFAULT_MIN_REFRESH_INTERVAL, DOMAIN
+from .const import DEFAULT_MIN_POLL_INTERVAL, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -31,6 +31,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     client = AlphaHWRClient(entry.data[CONF_ADDRESS])
     await client.connect()
+    client.stream(interval=DEFAULT_MIN_POLL_INTERVAL)
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = client

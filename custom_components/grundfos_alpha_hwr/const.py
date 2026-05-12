@@ -1,2 +1,2 @@
 DOMAIN = "grundfos_alpha_hwr"
-DEFAULT_MIN_REFRESH_INTERVAL = 30  # seconds
+DEFAULT_MIN_POLL_INTERVAL = 5.0  # seconds
