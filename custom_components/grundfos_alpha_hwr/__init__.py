@@ -30,6 +30,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug("Setting up Alpha HWR component from config entry: %s", entry.data[CONF_NAME])
 
     client = AlphaHWRClient(entry.data[CONF_ADDRESS])
+    await client.connect()
+
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = client
 
@@ -44,6 +46,6 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return False
 
     if client := hass.data[DOMAIN].pop(entry.entry_id, None):
-        client.disconnect()
+        await client.disconnect()
     bluetooth.async_rediscover_address(hass, entry.data[CONF_ADDRESS])
     return True

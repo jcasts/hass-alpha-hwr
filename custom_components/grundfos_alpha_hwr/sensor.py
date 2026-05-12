@@ -29,7 +29,6 @@ async def async_setup_entry(
         WaterTempSensorEntity(hass, entry),
         PcbTempSensorEntity(hass, entry),
     ]
-
     async_add_entities(entities)
 
 class AlphaHWRSensorEntity(SensorEntity):
