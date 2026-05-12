@@ -80,7 +80,7 @@ class FlowRateSensorEntity(AlphaHWRSensorEntity):
             entry,
             "Flow Rate",
             UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR,
-            SensorDeviceClass.FLOW,
+            SensorDeviceClass.VOLUME_FLOW_RATE,
             lambda telemetry: telemetry.flow_m3h)
 
 
