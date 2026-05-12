@@ -1,5 +1,5 @@
 from alpha_hwr import AlphaHWRClient
-
+import asyncio
 from datetime import datetime
 
 from homeassistant.components import bluetooth
@@ -17,7 +17,10 @@ from homeassistant.core import HomeAssistant
 
 import logging
 
-from .const import DEFAULT_MIN_POLL_INTERVAL, DOMAIN
+from .const import (
+    DEFAULT_MIN_POLL_INTERVAL,
+    DOMAIN,
+    STREAM_TASK)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -31,7 +34,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     client = AlphaHWRClient(entry.data[CONF_ADDRESS])
     await client.connect()
-    client.stream(interval=DEFAULT_MIN_POLL_INTERVAL)
+    stream_task = asyncio.create_task(client.telemetry.stream(interval=DEFAULT_MIN_POLL_INTERVAL))
+    client.data[STREAM_TASK] = stream_task
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = client
@@ -47,6 +51,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return False
 
     if client := hass.data[DOMAIN].pop(entry.entry_id, None):
+        if stream_task := client.data.pop(STREAM_TASK, None):
+            stream_task.cancel()
         await client.disconnect()
     bluetooth.async_rediscover_address(hass, entry.data[CONF_ADDRESS])
     return True
