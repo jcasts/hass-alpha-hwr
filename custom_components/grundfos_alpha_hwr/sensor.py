@@ -53,7 +53,7 @@ class AlphaHWRSensorEntity(SensorEntity):
 
     async def async_update(self) -> None:
         """Fetch the latest temperature from the client."""
-        telemetry = self._get_telemetry()
+        telemetry = await self._get_telemetry()
         if telemetry is not None:
             self._attr_native_value = self._fn_telemetry(telemetry)
 
@@ -61,13 +61,9 @@ class AlphaHWRSensorEntity(SensorEntity):
         """Get the Alpha HWR client from the Home Assistant data store."""
         return self._hass.data[DOMAIN][self._entry.entry_id]
     
-    def _get_telemetry(self) -> TelemetryData | None:
+    async def _get_telemetry(self) -> TelemetryData | None:
         """Get the latest telemetry data from the client."""
-        client = self._get_client()
-        telemetry = client.telemetry
-        if telemetry is None:
-            return None
-        return client.telemetry.current
+        return await self._get_client().get_telemetry()
 
 
 class FlowRateSensorEntity(AlphaHWRSensorEntity):
