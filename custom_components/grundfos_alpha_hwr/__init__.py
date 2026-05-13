@@ -28,6 +28,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     coordinator = AlphaHWRUpdateCoordinator(AlphaHWRClient(entry.data[CONF_ADDRESS]))
     await coordinator.client.connect()
+    await coordinator.client.authenticate()
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
