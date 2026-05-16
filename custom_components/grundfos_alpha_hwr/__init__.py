@@ -27,8 +27,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug("Setting up Alpha HWR component from config entry: %s", entry.data[CONF_NAME])
 
     coordinator = AlphaHWRUpdateCoordinator(AlphaHWRClient(entry.data[CONF_ADDRESS]))
-    await coordinator.client.connect()
-    await coordinator.client.authenticate()
+    await coordinator.connect()
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
@@ -54,6 +53,14 @@ class AlphaHWRUpdateCoordinator:
         self._lock = asyncio.Lock()
         self.client = client
         self.last_update = None
+
+    async def connect(self) -> None:
+        """Connect to the Alpha HWR client."""
+        await self.client.connect()
+
+    async def is_connected(self) -> bool:
+        """Check if the client is connected."""
+        return await self.client.is_connected()
 
     async def get_telemetry(self) -> TelemetryData | None:
         """Fetch the latest telemetry data from the client."""

@@ -5,6 +5,12 @@
 			"no_devices_found": "[%key:common::config_flow::abort::no_devices_found%]",
 			"no_name": "No device name found in advertisement data. Please ensure the device is advertising correctly and try again."
 		},
+		"step": {
+			"bluetooth": {
+				"title": "Pair Grundfos Alpha HWR",
+				"description": "Please ensure your Grundfos Alpha HWR device {name} is in pairing mode."
+			}
+		},
 		"error": {
 			"cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
 			"invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
