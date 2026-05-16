@@ -7,7 +7,7 @@
 		},
 		"step": {
 			"bluetooth": {
-				"title": "Pair Grundfos Alpha HWR",
+				"title": "Pair Device",
 				"description": "Please ensure your Grundfos Alpha HWR device {name} is in pairing mode."
 			}
 		},

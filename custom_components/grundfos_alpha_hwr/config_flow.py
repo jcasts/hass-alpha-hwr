@@ -43,12 +43,17 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         self.context["title_placeholders"] = {
             CONF_NAME: human_readable_name(
-                None, discovery_info.name, discovery_info.address
+                None, self.name, self.address
             )
         }
         return self.async_show_form(step_id="setup")
     
     async def async_step_setup(self, user_input: Mapping[str, Any] | None = None):
+        self.context["title_placeholders"] = {
+            CONF_NAME: human_readable_name(
+                None, self.name, self.address
+            )
+        }
         if user_input is not None:
             return self.async_create_entry(
                 title=self.name or "",
